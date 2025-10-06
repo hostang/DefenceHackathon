@@ -7,5 +7,23 @@
     </head>
     <body>
         <h1>Hi this is my page</h1>
+
+        <h1>Cloud Function Response:</h1>
+  <div id="output">Loading...</div>
+
+  <script>
+    // Replace with your actual Cloud Function URL:
+    const functionUrl = "https://testing-317763510919.europe-west1.run.app";
+
+    fetch(functionUrl)
+      .then(response => response.text())       // since the function returns a plain string
+      .then(data => {
+        document.getElementById('output').innerText = data;
+      })
+      .catch(error => {
+        document.getElementById('output').innerText = "Error: " + error;
+        console.error(error);
+      });
+  </script>
     </body>
 </html>
