@@ -7,6 +7,10 @@ app = Flask(__name__)
 # Wide-open CORS for demo; lock this down to your domain in production.
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
+from weather import bp as weather_bp
+app.register_blueprint(weather_bp, url_prefix="/api")
+
 @app.route("/")
 def hello_world():
     return "Hello, World!"
