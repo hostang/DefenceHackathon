@@ -1,7 +1,5 @@
-from flask import Request, jsonify
+from flask import jsonify  # Optional if you prefer pure dict
 
-def hello_http(request: Request):
-    name = (request.args.get("name")
-            or (request.get_json(silent=True) or {}).get("name")
-            or "world")
-    return jsonify(ok=True, message=f"Hello, {name}!"), 200
+def hello_world(request):
+    name = request.args.get('name', 'World')
+    return jsonify({"message": f"Hello, {name}!"})
