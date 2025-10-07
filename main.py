@@ -1,50 +1,76 @@
 import os
-from datetime import datetime
-from flask import Flask, jsonify, request, abort
-from flask_cors import CORS
+from flask import Flask, request, jsonify
 from google.cloud import firestore
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # tighten in prod
 
+# Initialize Firestore DB client
+# This client will automatically pick up credentials from the Cloud Run environment
+# (service account associated with the Cloud Run service).
 db = firestore.Client()
-COLL = "landingZones"  # make sure this matches your Firestore collection
 
-# Optional: health check
-@app.get("/health")
-def health():
-    return {"ok": True}
+# --- Firestore CRUD Helper Functions (as discussed previously) ---
+def get_document(collection_name, document_id):
+    doc_ref = db.collection(collection_name).document(document_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        return doc.to_dict()
+    else:
+        return None
 
-# Helper to serialize timestamps
-def to_iso(ts):
-    return ts.isoformat() if isinstance(ts, datetime) else ts
+def query_collection(collection_name):
+    docs = db.collection(collection_name).stream()
+    return [doc.to_dict() for doc in docs]
 
-# Example root routes
-@app.route("/")
+# --- Flask Routes for your API ---
+
+@app.route('/')
 def hello_world():
-    return "Hello, World!"
+    return 'Hello from Cloud Run Flask App!'
 
-@app.route("/hello/<name>")
-def hello_name(name):
-    return f"Hello, {name}!"
+@app.route('/firestore/document/<collection_name>/<document_id>', methods=['GET'])
+def get_firestore_document(collection_name, document_id):
+    """
+    Retrieves a single document from Firestore.
+    Example: GET /firestore/document/landingZones/THq09g8GqNDIw6xnSiNP
+    """
+    doc_data = get_document(collection_name, document_id)
+    if doc_data:
+        return jsonify(doc_data), 200
+    else:
+        return jsonify({"error": "Document not found"}), 404
 
-# --- READ one by id ---
-@app.get("/locations/<lz_id>")
-def get_location(lz_id):
-    snap = db.collection(COLL).document(lz_id).get()
-    if not snap.exists:
-        abort(404, description="Document not found")
-    d = snap.to_dict() or {}
-    d["id"] = lz_id
-    d["created_at"] = to_iso(d.get("created_at"))
-    d["updated_at"] = to_iso(d.get("updated_at"))
-    return jsonify(d)
+@app.route('/firestore/collection/<collection_name>', methods=['GET'])
+def get_firestore_collection(collection_name):
+    """
+    Retrieves all documents from a specified collection.
+    Example: GET /firestore/collection/landingZones
+    """
+    collection_data = query_collection(collection_name)
+    return jsonify(collection_data), 200
 
-# Optional JSON error so you can see the difference between route 404 and doc 404
-@app.errorhandler(404)
-def not_found(e):
-    return jsonify({"error": "not_found", "detail": getattr(e, "description", "Route not found")}), 404
+# You can add more routes for POST (create), PUT/PATCH (update), DELETE operations
+# For example, a POST route to create a document:
+@app.route('/firestore/document/<collection_name>', methods=['POST'])
+def create_firestore_document(collection_name):
+    """
+    Creates a new document in the specified collection with an auto-generated ID.
+    Expects JSON body with the document data.
+    """
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request must be JSON"}), 400
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+    # Assuming you have a create_document_auto_id function
+    # For simplicity, let's just use .add() directly here
+    try:
+        update_time, doc_ref = db.collection(collection_name).add(data)
+        return jsonify({"message": "Document created", "id": doc_ref.id}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+if __name__ == '__main__':
+    # This is used when running locally. Gunicorn (or similar) will run the app in Cloud Run.
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
