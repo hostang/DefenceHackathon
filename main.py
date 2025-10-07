@@ -2,6 +2,9 @@ import os
 from flask import Flask, request, jsonify
 from google.cloud import firestore
 
+from flask_cors import CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 app = Flask(__name__)
 
 # Initialize Firestore DB client
