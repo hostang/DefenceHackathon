@@ -7,6 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
+# to avoid Cross Origin Resource sharing issue
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize Firestore DB client
@@ -37,7 +38,7 @@ def hello_world():
 def get_firestore_document(collection_name, document_id):
     """
     Retrieves a single document from Firestore.
-    Example: GET /firestore/document/landingZones/id
+    URL: GET /firestore/document/landingZones/id
     """
     doc_data = get_document(collection_name, document_id)
     if doc_data:
@@ -49,7 +50,7 @@ def get_firestore_document(collection_name, document_id):
 def get_firestore_collection(collection_name):
     """
     Retrieves all documents from a specified collection.
-    Example: GET /firestore/collection/landingZones
+    URL: GET /firestore/collection/landingZones
     """
     collection_data = query_collection(collection_name)
     return jsonify(collection_data), 200
@@ -59,8 +60,8 @@ def get_firestore_collection(collection_name):
 @app.route('/firestore/document/<collection_name>', methods=['POST'])
 def create_firestore_document(collection_name):
     """
-    Creates a new document in the specified collection with an auto-generated ID.
-    Expects JSON body with the document data.
+    Creates a new document in firestore with an auto-generated ID.
+    PostCondition: Expects JSON body with the document data.
     """
     data = request.get_json()
     if not data:
