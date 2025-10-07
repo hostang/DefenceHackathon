@@ -5,7 +5,7 @@ from google.cloud import firestore
 app = Flask(__name__)
 
 # Initialize Firestore DB client
-# This client will automatically pick up credentials from the Cloud Run environment
+# This client pick up credentials from the Cloud Run environment
 # (service account associated with the Cloud Run service).
 db = firestore.Client()
 
@@ -22,7 +22,7 @@ def query_collection(collection_name):
     docs = db.collection(collection_name).stream()
     return [doc.to_dict() for doc in docs]
 
-# --- Flask Routes for your API ---
+# --- Flask Routes your API endpoints ---
 
 @app.route('/')
 def hello_world():
@@ -32,7 +32,7 @@ def hello_world():
 def get_firestore_document(collection_name, document_id):
     """
     Retrieves a single document from Firestore.
-    Example: GET /firestore/document/landingZones/THq09g8GqNDIw6xnSiNP
+    Example: GET /firestore/document/landingZones/id
     """
     doc_data = get_document(collection_name, document_id)
     if doc_data:
@@ -49,8 +49,8 @@ def get_firestore_collection(collection_name):
     collection_data = query_collection(collection_name)
     return jsonify(collection_data), 200
 
-# You can add more routes for POST (create), PUT/PATCH (update), DELETE operations
-# For example, a POST route to create a document:
+# add more routes for POST (create), PUT/PATCH (update), DELETE operations
+# a POST route to create a document:
 @app.route('/firestore/document/<collection_name>', methods=['POST'])
 def create_firestore_document(collection_name):
     """
