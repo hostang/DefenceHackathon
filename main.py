@@ -71,7 +71,49 @@ def create_firestore_document(collection_name):
         return jsonify({"message": "Document created", "id": doc_ref.id}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+        
+# return unique set of locations
+@app.route('/api/locations', methods=['GET'])
+def get_unique_locations():
+    """
+    Returns a list of unique location names from all documents in Firestore.
+    """
+    locations = set()
+    for doc in db.collection('landingZones').stream():
+        data = doc.to_dict()
+        loc = data.get('location')
+        if loc:
+            locations.add(loc)
+    return jsonify(sorted(list(locations)))
 
+# filter based on landingZones location
+@app.route('/api/landingzones', methods=['GET'])
+def get_landing_zones_by_location():
+    """
+    Returns all landing zone documents that match the given location.
+    endpoint URL - /api/landingzones?location=Surrey
+    """
+    location_param = request.args.get('location')
+    if not location_param:
+        return jsonify({"error": "Missing 'location' query parameter"}), 400
+
+    # Firestore query: filter by location field
+    query = db.collection('landingZones').where('location', '==', location_param).stream()
+
+    results = []
+    for doc in query:
+        data = doc.to_dict()
+        # You can filter or rename fields here before returning
+        results.append({
+            "id": data.get("lz_id", doc.id),
+            "location": data.get("location"),
+            "latitude": data.get("latitude"),
+            "longitude": data.get("longitude"),
+            #"terrain_type": data.get("terrain_type"),
+            "recommended_status": data.get("recommended_status", False)
+        })
+
+    return jsonify(results), 200
 
 if __name__ == '__main__':
     # Gunicorn (or similar) will run the app in Cloud Run.
