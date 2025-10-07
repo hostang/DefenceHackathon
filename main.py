@@ -67,7 +67,9 @@ def create_firestore_document(collection_name):
     if not data:
         return jsonify({"error": "Request must be JSON"}), 400
     try:
-        update_time, doc_ref = db.collection(collection_name).add(data)
+        # Pick document ID from incoming data
+        doc_id = data.get("id") or data.get("lz_id")
+        update_time, doc_ref = db.collection(collection_name).document(doc_id).add(data)
         return jsonify({"message": "Document created", "id": doc_ref.id}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
