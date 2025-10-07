@@ -31,7 +31,7 @@ def hello_name(name):
 
 ##########
 
-@app.route("/locations/<lz_id>", methods=["GET"])
+@app.route("/landingZones/<lz_id>", methods=["GET"])
 def get_location(lz_id):
     snap = db.collection(COLL).document(lz_id).get()
     if not snap.exists:
