@@ -5,11 +5,10 @@ from google.cloud import firestore
 app = Flask(__name__)
 
 # Initialize Firestore DB client
-# This client pick up credentials from the Cloud Run environment
-# (service account associated with the Cloud Run service).
+
 db = firestore.Client()
 
-# --- Firestore CRUD Helper Functions (as discussed previously) ---
+# --- Firestore CRUD Helper Functions ---
 def get_document(collection_name, document_id):
     doc_ref = db.collection(collection_name).document(document_id)
     doc = doc_ref.get()
@@ -25,6 +24,7 @@ def query_collection(collection_name):
 # --- Flask Routes your API endpoints ---
 
 @app.route('/')
+# simple test of the routes
 def hello_world():
     return 'Hello from Cloud Run Flask App!'
 
@@ -60,9 +60,6 @@ def create_firestore_document(collection_name):
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request must be JSON"}), 400
-
-    # Assuming you have a create_document_auto_id function
-    # For simplicity, let's just use .add() directly here
     try:
         update_time, doc_ref = db.collection(collection_name).add(data)
         return jsonify({"message": "Document created", "id": doc_ref.id}), 201
@@ -71,6 +68,6 @@ def create_firestore_document(collection_name):
 
 
 if __name__ == '__main__':
-    # This is used when running locally. Gunicorn (or similar) will run the app in Cloud Run.
+    # Gunicorn (or similar) will run the app in Cloud Run.
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 
