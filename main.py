@@ -46,16 +46,32 @@ def get_firestore_document(collection_name, document_id):
 
 @app.route("/firestore/document/<collection_name>/latest", methods=["GET"])
 def get_latest_document(collection_name):
-    global latest_doc_id
-    if not latest_doc_id:
-        return jsonify({"error": "Document not found"}), 404
-    doc_data = get_document(collection_name, latest_doc_id)
-    if not doc.exists:
-        return jsonify({"error": "Latest document not found"}), 404
-    return jsonify(doc_data), 200
+    try:
+        q = (db.collection(collection_name)
+               .order_by("created_at", direction=firestore.Query.DESCENDING)
+               .limit(1))
+        docs = list(q.stream())
+        if not docs:
+            return jsonify({"error": "No documents found"}), 404
+        snap = docs[0]
+        return jsonify({"id": snap.id, **snap.to_dict()}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
         
 # add more routes for POST (create), PUT/PATCH (update), DELETE operations
 # a POST route to create a document:
+
+
+@app.route("/firestore/document/<collection_name>", methods=["POST"])
+def create_firestore_document(collection_name):
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request must be JSON"}), 400
+    data["created_at"] = firestore.SERVER_TIMESTAMP
+    _, doc_ref = db.collection(collection_name).add(data)
+    return jsonify({"message": "Document created", "id": doc_ref.id}), 201
+    
+'''
 @app.route("/firestore/document/<collection_name>", methods=["POST"])
 def create_firestore_document(collection_name):
     """
@@ -72,7 +88,7 @@ def create_firestore_document(collection_name):
         return jsonify({"message": "Document created", "id": doc_ref.id}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+'''
 @app.route("/")
 def home():
     return render_template("index.html")  # uses templates/index.html
