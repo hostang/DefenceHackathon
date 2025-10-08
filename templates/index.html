@@ -2,68 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<!-- esponsive meta tag to size the content to the device-width -->
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Reconnaissance Data Collection</title>
 
-<!-- Bootstrap + Icons -->
+<!-- Bootstrap CDN for CSS styling and Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- App styles -->
-<link rel="stylesheet" href="/static/styles.css">
+<!-- linking to static folder styles sheet -->
+<link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
+<!-- reponsive container class with padding and vertical spacing with bootstrap-->
 <main class="container py-4">
 
-  <!-- Header -->
-  <header class="border rounded-4 bg-white p-4 mb-3">
-    <div class="d-flex justify-content-between flex-wrap">
+  <!-- Header, using rounded border with bg white, setting padding and margin bottm-->
+  <header class="border rounded-4 bg-white p-3 mb-4">
+    <div class="d-flex justify-content-between">
       <div>
-        <h4 class="mb-0">Reconnaissance Data Collection</h4>
-        <small class="text-muted">Ground Intelligence Gathering System</small>
+        <h1>Reconnaissance Data Collection</h1>
+        <h6>Ground Intelligence Gathering System</h6>
       </div>
-      <div class="text-end small text-muted">
-        <i class="bi bi-clock me-1"></i><strong id="clockTime">—:—</strong>
-        <span class="badge text-bg-dark ms-1">Live</span>
+      <div class="small">
+        <!-- Clock icon from Bootstrap Icons -->
+        <i class="bi bi-clock"></i><strong id="clockTime">—:—</strong>
+        <!-- using badge component for badge style -->
+        <span class="badge text-bg-dark">Live</span>
         <div id="clockDate"></div>
       </div>
     </div>
 
     <!-- Current Tasks -->
+    <!--using a lot of margin utilities from bootstrap-->
     <section class="mt-3">
-      <h6 class="mb-2"><i class="bi bi-clock-history me-1"></i>Current Tasks</h6>
+      <h6 class="mb-2"><i class="bi bi-clock"></i>Current Tasks</h6>
+      <!--using gap properties between rows-->
       <div id="taskList" class="d-flex flex-wrap gap-3"></div>
       <div class="mt-3 d-flex gap-2">
-        <button class="btn btn-success"><i class="bi bi-archive me-1"></i> ACCESS LZ1 ARCHIVE</button>
-        <button class="btn btn-light border">Create new button</button>
+        <button class="btn btn-success">ACCESS LZ1 ARCHIVE</button>
+
       </div>
     </section>
   </header>
 
-  <!-- Map -->
+  <!-- google map card - section container for maps-->
   <section class="card p-3 mb-4">
     <div id="map"></div>
   </section>
 
-  <!-- Report Form -->
+  <section card p-3> <!--section encapsulating form-->
+  <!-- Report Form card - container-->
+   <!-- the form is submitting file so using enctype-->
   <form id="reportForm" class="card p-4" enctype="multipart/form-data">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="mb-0">Reconnaissance Report</h6>
-      <div class="w-25">
-        <div class="progress progress-thin"><div id="progressBar" class="progress-bar" style="width:0%"></div></div>
+      <h4 class="mb-0">Reconnaissance Report</h4>
+      <div class="w-25"><!--setting width of the progress bar-->
+        <div class="progress"><div id="progressBar" class="progress-bar" style="width:0%"></div></div>
         <small class="text-muted"><span id="progressPercent">0%</span> Complete</small>
       </div>
     </div>
 
-    <div class="row g-3">
+    <div class="row g-3"> <!--default row have 3 columns, using bootstrap grid system with gap of 3-->
       <div class="col-md-6">
-        <label class="form-label" for="siteName">Name of site</label>
+        <label class="form-label">Name of site</label>
         <input id="siteName" name="site_name" class="form-control required" required>
       </div>
-
+      <!--below divs uses col of various sizes-->
       <div class="col-md-3">
         <label class="form-label" for="areaSize">Area Size</label>
-        <select id="areaSize" name="area_size" class="form-select required" required>
+        <select id="areaSize" name="area_size" class="form-select" required>
           <option value="">Select...</option>
           <option>&lt;100ft</option>
           <option>&gt;100ft</option>
@@ -71,35 +79,35 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label" for="gridRef">Grid Reference (8-digit, e.g. <span class="mono">5123 2068</span>)</label>
-        <input id="gridRef" name="grid_reference" class="form-control mono required" placeholder="5123 2068" required>
+        <label class="form-label">Grid Reference (8-digit, e.g. <span class="mono">5123 2068</span>)</label>
+        <input id="gridRef" name="grid_reference" class="form-control required" placeholder="5123 2068" required>
         <small class="text-muted">Exactly 8 digits; displayed as <span class="mono">dddd dddd</span>.</small>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label" for="photo">Photo (optional)</label>
+        <label class="form-label">Photo (optional)</label>
         <input id="photo" name="photo" type="file" accept="image/*" class="form-control">
       </div>
 
       <div class="col-md-4">
-        <label class="form-label" for="slope">Slope Category (degrees)</label>
+        <label class="form-label">Slope Category (degrees)</label>
         <select id="slope" name="slope_category" class="form-select required" required>
           <option value="">Select...</option>
-          <option>&lt;5</option>
-          <option>&lt;10</option>
-          <option>&lt;15</option>
-          <option>&lt;20</option>
-          <option>&gt;20</option>
+          <option>0-4</option>
+          <option>5-7</option>
+          <option>8-10</option>
+          <option>11-13</option>
+          <option>>14</option>
         </select>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label" for="elevation">Elevation (m)</label>
+        <label class="form-label">Elevation (m)</label>
         <input id="elevation" name="elevation" type="number" step="1" class="form-control">
       </div>
 
       <div class="col-md-4">
-        <label class="form-label" for="lighting">Light Conditions</label>
+        <label class="form-label">Light Conditions</label>
         <select id="lighting" name="lighting" class="form-select">
           <option value="">&mdash;</option>
           <option>Natural light</option>
@@ -108,31 +116,139 @@
         </select>
       </div>
 
+      <div class="col-md-4">
+        <label class="form-label">Temperature</label>
+        <input id="temperature" name="temperature" type="number" step="1" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Humidity</label>
+        <input id="humidity" name="humidity" type="number" step="1" class="form-control">
+      </div>
+
+      <!-- Ground Surface -->
+        <div class="col-12">
+            <label class="form-label d-block">Ground Surface</label>
+            <div class="row row-cols-2 row-cols-md-4 g-2">
+            <label class="form-check col">
+                <input id="gs_firm_grass" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Firm Grass">
+                Firm Grass
+            </label>
+            <label class="form-check col">
+                <input id="gs_compact_soil" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Compact Soil">
+                Compact Soil
+            </label>
+            <label class="form-check col">
+                <input id="gs_sand" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Sand">
+                Sand
+            </label>
+            <label class="form-check col">
+                <input id="gs_marsh" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Marsh">
+                Marsh
+            </label>
+            <label class="form-check col">
+                <input id="gs_gravel" class="form-check-input me-2 align-middle " type="checkbox" name="ground_surface" value="Gravel">
+                Gravel
+            </label>
+            <label class="form-check col">
+                <input id="gs_dust" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Dust">
+                Dust
+            </label>
+            <label class="form-check col">
+                <input id="gs_debris" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Debris">
+                Debris
+            </label>
+            <label class="form-check col">
+                <input id="gs_snow" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Snow">
+                Snow
+            </label>
+            <label class="form-check col">
+                <input id="gs_vegetation" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Vegetation">
+                Vegetation
+            </label>
+            </div>
+        </div>
+        
+        <!-- Hazards -->
+        <div class="col-12">
+            <label class="form-label d-block">Hazards</label>
+            <div class="row row-cols-2 row-cols-md-4 g-2">
+            <label class="form-check col">
+                <input id="hz_trees" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Trees">
+                Trees
+            </label>
+            <label class="form-check col">
+                <input id="hz_buildings" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Buildings">
+                Buildings
+            </label>
+            <label class="form-check col">
+                <input id="hz_rocks" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Rocks">
+                Rocks
+            </label>
+            <label class="form-check col">
+                <input id="hz_dense_veg" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Dense Vegetation">
+                Dense Vegetation
+            </label>
+            <label class="form-check col">
+                <input id="hz_excessive_wildlife" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Excessive Wildlife">
+                Excessive Wildlife
+            </label>
+            <label class="form-check col">
+                <input id="hz_water" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Water">
+                Water
+            </label>
+            <label class="form-check col">
+                <input id="hz_fences" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Fences">
+                Fences
+            </label>
+            <label class="form-check col">
+                <input id="hz_unstable_ground" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Unstable Ground">
+                Unstable Ground
+            </label>
+            <label class="form-check col">
+                <input id="hz_growth_18" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Any Growth Above 18 Inches">
+                Any Growth Above 18 Inches
+            </label>
+            <label class="form-check col">
+                <input id="hz_wildlife" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Wildlife">
+                Wildlife
+            </label>
+            <label class="form-check col">
+                <input id="hz_powerlines" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Powerlines">
+                Powerlines
+            </label>
+            <label class="form-check col">
+                <input id="hz_other" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Other">
+                Other
+            </label>
+            </div>
+        </div>
+
       <div class="col-12">
-        <label class="form-label" for="details">Detailed Description</label>
+        <label class="form-label">Detailed Description</label>
         <textarea id="details" name="details" rows="4" class="form-control"></textarea>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label" for="reporter">Reporter Name</label>
+        <label class="form-label">Reporter Name</label>
         <input id="reporter" name="reporter_name" class="form-control required" required>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label" for="callsign">Service number / Callsign</label>
+        <label class="form-label">Service number / Callsign</label>
         <input id="callsign" name="service_number" class="form-control">
       </div>
 
       <div class="col-md-6">
-        <label class="form-label" for="reportTime">Date &amp; Time of Observation</label>
+        <label class="form-label">Date &amp; Time of Observation</label>
         <input id="reportTime" type="datetime-local" name="report_time" class="form-control required" required>
       </div>
 
-      <!-- Hidden lat/lng (filled by task click or marker drag) -->
+      <!-- Hidden lat/lng (filled by task click or marker drag) submit it when the form submits -->
       <input type="hidden" id="lat"  name="lat">
       <input type="hidden" id="lng"  name="lng">
 
-      <div class="col-12 d-flex">
+      <div>
         <button id="submitBtn" type="submit" class="btn btn-secondary ms-auto" disabled>
           <i class="bi bi-send me-1"></i> Send Report
         </button>
@@ -141,16 +257,20 @@
     </div>
   </form>
 
-  <!-- Summary -->
-  <article class="card p-3 mt-3">
+    </section>
+
+  <!-- Summary card below the form to populate typed data-->
+  <section class="card p-3 mt-3">
     <h6 class="mb-2">Report Summary</h6>
-    <div class="row small">
+    <div class="row small"> <!--two columns-->
       <div class="col-md-6">
         <div><strong>Site:</strong> <span id="sumSite" class="text-muted">—</span></div>
         <div><strong>Grid:</strong> <span id="sumGrid" class="text-muted mono">—</span></div>
         <div><strong>Lat/Lng:</strong> <span id="sumLatLng" class="text-muted mono">—</span></div>
         <div><strong>Date/Time:</strong> <span id="sumTime" class="text-muted">—</span></div>
         <div><strong>Area Size:</strong> <span id="sumArea" class="text-muted">—</span></div>
+        <div><strong>Hazards:</strong> <span id="sumHaz" class="text-muted">None</span></div>
+        <div><strong>Details:</strong></div>
       </div>
       <div class="col-md-6">
         <div><strong>Slope (°):</strong> <span id="sumSlope" class="text-muted">—</span></div>
@@ -158,22 +278,17 @@
         <div><strong>Light:</strong> <span id="sumLight" class="text-muted">—</span></div>
         <div><strong>Reporter:</strong> <span id="sumReporter" class="text-muted">—</span></div>
       </div>
-      <div class="col-12 mt-2">
-        <div><strong>Hazards:</strong> <span id="sumHaz" class="text-muted">None</span></div>
-        <div class="mt-1"><strong>Details:</strong></div>
-        <div id="sumDetails" class="text-muted">—</div>
-      </div>
     </div>
-  </article>
+  </section>
 </main>
 
-<!-- Bootstrap bundle -->
+<!-- Bootstrap js cdn bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- App logic -->
-<script src="/static/app.js"></script>
+<!-- local App logic -->
+<script src="../static/app.js"></script>
 
-<!-- Google Maps (callback defined in app.js as window.initMap) -->
+<!-- Google Maps callback defined in app.js as window.initMap - using API directly -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl8lw1_c5RsRLX_GqkoUJScn6E0IrOmV8&callback=initMap"></script>
 </body>
 </html>
