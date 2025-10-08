@@ -87,7 +87,48 @@ function setLatLng(lat, lng){
   lngH.value = lng;
 }
 
-   /*
+    /*
+
+    [siteName, areaSize, slope, reporter, reportTime].forEach(el=>el.addEventListener('input',()=>{updateSummary(); updateProgress();}));
+    [lighting, elevation, details].forEach(el=>el.addEventLis()
+
+    /* ===== Summary ===== */
+
+    /*
+    const sumSite   = document.getElementById('sumSite');
+    const sumGrid   = document.getElementById('sumGrid');
+    const sumLatLng = document.getElementById('sumLatLng');
+    const sumTime   = document.getElementById('sumTime');
+    const sumArea   = document.getElementById('sumArea');
+    const sumSlope  = document.getElementById('sumSlope');
+    const sumElev   = document.getElementById('sumElev');
+    const sumLight  = document.getElementById('sumLight');
+    const sumReporter=document.getElementById('sumReporter');
+    const sumDetails= document.getElementById('sumDetails');
+    const sumHaz    = document.getElementById('sumHaz');
+
+    function updateSummary(){
+    const val = el => el.value || '—';
+    sumSite.textContent   = val(siteName);
+    sumGrid.textContent   = gridRef.value || '—';
+    sumTime.textContent   = val(reportTime);
+    sumArea.textContent   = val(areaSize);      // <100ft / >100ft
+    sumElev.textContent   = val(elevation);     // numeric
+    sumLight.textContent  = val(lighting);
+    sumReporter.textContent = val(reporter);
+    sumDetails.textContent  = val(details);
+
+    const slopeVal = val(slope);
+    sumSlope.textContent = slopeVal==='—' ? '—' : `${slopeVal.replace('<','< ').replace('>','> ')}°`;
+
+    const hazards = [...document.querySelectorAll('input[type=checkbox][name=hazards]:checked')].map(x=>x.value);
+    sumHaz.textContent = hazards.length ? hazards.join(', ') : 'None';
+
+    if(latH.value && lngH.value) sumLatLng.textContent = `${parseFloat(latH.value).toFixed(6)}, ${parseFloat(lngH.value).toFixed(6)}`;
+    }
+
+    /* ===== Submit (adjust URL if using Cloud Run) ===== */
+    /*
     const form = document.getElementById('reportForm');
     const toast = document.getElementById('toast');
 
