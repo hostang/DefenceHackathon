@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<!-- esponsive meta tag to size the content to the device-width -->
+<!-- responsive meta tag to size the content to the device-width -->
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Reconnaissance Data Collection</title>
 
@@ -14,255 +14,271 @@
 <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-<!-- reponsive container class with padding and vertical spacing with bootstrap-->
+<!-- responsive container class with padding and vertical spacing with bootstrap -->
 <main class="container py-4">
 
-  <!-- Header, using rounded border with bg white, setting padding and margin bottm-->
+  <!-- Header, using rounded border with bg white, setting padding and margin bottom -->
   <header class="border rounded-4 bg-white p-3 mb-4">
     <div class="d-flex justify-content-between">
       <div>
-        <h1>Reconnaissance Data Collection</h1>
-        <h6>Ground Intelligence Gathering System</h6>
+        <h1 class="h3 mb-1">Reconnaissance Data Collection</h1>
+        <h6 class="text-muted mb-0">Ground Intelligence Gathering System</h6>
       </div>
-      <div class="small">
+      <div class="small text-end">
         <!-- Clock icon from Bootstrap Icons -->
-        <i class="bi bi-clock"></i><strong id="clockTime">—:—</strong>
+        <i class="bi bi-clock"></i>
+        <strong id="clockTime">—:—</strong>
         <!-- using badge component for badge style -->
-        <span class="badge text-bg-dark">Live</span>
+        <span class="badge text-bg-dark ms-1">Live</span>
         <div id="clockDate"></div>
       </div>
     </div>
 
     <!-- Current Tasks -->
-    <!--using a lot of margin utilities from bootstrap-->
+    <!-- using Bootstrap spacing utilities for layout -->
     <section class="mt-3">
-      <h6 class="mb-2"><i class="bi bi-clock"></i>Current Tasks</h6>
-      <!--using gap properties between rows-->
+      <h6 class="mb-2">
+        <i class="bi bi-clock me-1"></i>
+        Current Tasks
+      </h6>
+      <!-- using flex-wrap + gap utilities for task tiles -->
       <div id="taskList" class="d-flex flex-wrap gap-3"></div>
       <div class="mt-3 d-flex gap-2">
         <button class="btn btn-success">ACCESS LZ1 ARCHIVE</button>
-
       </div>
     </section>
   </header>
 
-  <!-- google map card - section container for maps-->
-  <section class="card p-3 mb-4">
-    <div id="map"></div>
+  <!-- google map card - section container for maps and photo of the location -->
+  <section class="card p-3 mb-4" aria-labelledby="mediaSectionTitle">
+    <h2 id="mediaSectionTitle" class="visually-hidden">Location and Photo</h2>
+    <div class="row g-3">
+      <figure class="col-12 col-md-8 m-0">
+        <!-- map container; height is set in styles.css (#map) -->
+        <div id="map" role="img" aria-label="Satellite map showing current task location"></div>
+        <figcaption class="text-muted small mt-1">Interactive map. Use arrow keys with map controls if available.</figcaption>
+      </figure>
+      
+      <figure class="col-12 col-md-4 m-0">
+        <!-- Photo preview container -->
+        <div id="photoPreview"
+             class="d-flex justify-content-center align-items-center bg-light border rounded overflow-hidden"
+             role="img"
+             aria-label="Selected photo preview"
+             style="height:420px;">
+          <img src="../images/img.png" alt="Location preview"
+               style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        <figcaption class="text-muted small mt-1">Photo preview area.</figcaption>
+      </figure>
+
+    </div>
   </section>
 
-  <section card p-3> <!--section encapsulating form-->
-  <!-- Report Form card - container-->
-   <!-- the form is submitting file so using enctype-->
-  <form id="reportForm" class="card p-4" enctype="multipart/form-data">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="mb-0">Reconnaissance Report</h4>
-      <div class="w-25"><!--setting width of the progress bar-->
-        <div class="progress"><div id="progressBar" class="progress-bar" style="width:0%"></div></div>
-        <small class="text-muted"><span id="progressPercent">0%</span> Complete</small>
-      </div>
-    </div>
-
-    <div class="row g-3"> <!--default row have 3 columns, using bootstrap grid system with gap of 3-->
-      <div class="col-md-6">
-        <label class="form-label">Name of site</label>
-        <input id="siteName" name="site_name" class="form-control required" required>
-      </div>
-      <!--below divs uses col of various sizes-->
-      <div class="col-md-3">
-        <label class="form-label" for="areaSize">Area Size</label>
-        <select id="areaSize" name="area_size" class="form-select" required>
-          <option value="">Select...</option>
-          <option>&lt;100ft</option>
-          <option>&gt;100ft</option>
-        </select>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Grid Reference (8-digit, e.g. <span class="mono">5123 2068</span>)</label>
-        <input id="gridRef" name="grid_reference" class="form-control required" placeholder="5123 2068" required>
-        <small class="text-muted">Exactly 8 digits; displayed as <span class="mono">dddd dddd</span>.</small>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Photo (optional)</label>
-        <input id="photo" name="photo" type="file" accept="image/*" class="form-control">
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Slope Category (degrees)</label>
-        <select id="slope" name="slope_category" class="form-select required" required>
-          <option value="">Select...</option>
-          <option>0-4</option>
-          <option>5-7</option>
-          <option>8-10</option>
-          <option>11-13</option>
-          <option>>14</option>
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Elevation (m)</label>
-        <input id="elevation" name="elevation" type="number" step="1" class="form-control">
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Light Conditions</label>
-        <select id="lighting" name="lighting" class="form-select">
-          <option value="">&mdash;</option>
-          <option>Natural light</option>
-          <option>Floodlights</option>
-          <option>No lighting</option>
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Temperature</label>
-        <input id="temperature" name="temperature" type="number" step="1" class="form-control">
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Humidity</label>
-        <input id="humidity" name="humidity" type="number" step="1" class="form-control">
-      </div>
-
-      <!-- Ground Surface -->
-        <div class="col-12">
-            <label class="form-label d-block">Ground Surface</label>
-            <div class="row row-cols-2 row-cols-md-4 g-2">
-            <label class="form-check col">
-                <input id="gs_firm_grass" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Firm Grass">
-                Firm Grass
-            </label>
-            <label class="form-check col">
-                <input id="gs_compact_soil" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Compact Soil">
-                Compact Soil
-            </label>
-            <label class="form-check col">
-                <input id="gs_sand" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Sand">
-                Sand
-            </label>
-            <label class="form-check col">
-                <input id="gs_marsh" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Marsh">
-                Marsh
-            </label>
-            <label class="form-check col">
-                <input id="gs_gravel" class="form-check-input me-2 align-middle " type="checkbox" name="ground_surface" value="Gravel">
-                Gravel
-            </label>
-            <label class="form-check col">
-                <input id="gs_dust" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Dust">
-                Dust
-            </label>
-            <label class="form-check col">
-                <input id="gs_debris" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Debris">
-                Debris
-            </label>
-            <label class="form-check col">
-                <input id="gs_snow" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Snow">
-                Snow
-            </label>
-            <label class="form-check col">
-                <input id="gs_vegetation" class="form-check-input me-2 align-middle" type="checkbox" name="ground_surface" value="Vegetation">
-                Vegetation
-            </label>
-            </div>
+  <!-- section encapsulating form -->
+  <section class="p-3">
+    <!-- Report Form card - container -->
+    <!-- the form is submitting file so using enctype -->
+    <form id="reportForm" class="card p-4" enctype="multipart/form-data">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Reconnaissance Report</h4>
+        <!-- setting width of the progress bar -->
+        <div class="w-25">
+          <div class="progress">
+            <div id="progressBar"
+                 class="progress-bar"
+                 role="progressbar"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="0"
+                 style="width:0%"></div>
+          </div>
+          <small class="text-muted">
+            <span id="progressPercent">0%</span> Complete
+          </small>
         </div>
-        
-        <!-- Hazards -->
-        <div class="col-12">
-            <label class="form-label d-block">Hazards</label>
-            <div class="row row-cols-2 row-cols-md-4 g-2">
-            <label class="form-check col">
-                <input id="hz_trees" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Trees">
-                Trees
-            </label>
-            <label class="form-check col">
-                <input id="hz_buildings" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Buildings">
-                Buildings
-            </label>
-            <label class="form-check col">
-                <input id="hz_rocks" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Rocks">
-                Rocks
-            </label>
-            <label class="form-check col">
-                <input id="hz_dense_veg" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Dense Vegetation">
-                Dense Vegetation
-            </label>
-            <label class="form-check col">
-                <input id="hz_excessive_wildlife" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Excessive Wildlife">
-                Excessive Wildlife
-            </label>
-            <label class="form-check col">
-                <input id="hz_water" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Water">
-                Water
-            </label>
-            <label class="form-check col">
-                <input id="hz_fences" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Fences">
-                Fences
-            </label>
-            <label class="form-check col">
-                <input id="hz_unstable_ground" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Unstable Ground">
-                Unstable Ground
-            </label>
-            <label class="form-check col">
-                <input id="hz_growth_18" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Any Growth Above 18 Inches">
-                Any Growth Above 18 Inches
-            </label>
-            <label class="form-check col">
-                <input id="hz_wildlife" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Wildlife">
-                Wildlife
-            </label>
-            <label class="form-check col">
-                <input id="hz_powerlines" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Powerlines">
-                Powerlines
-            </label>
-            <label class="form-check col">
-                <input id="hz_other" class="form-check-input me-2 align-middle" type="checkbox" name="hazards" value="Other">
-                Other
-            </label>
-            </div>
+      </div>
+
+      <!-- using bootstrap grid system with gap of 3 -->
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="siteName">Name of site</label>
+          <input id="siteName" name="site_name" class="form-control" required>
         </div>
 
-      <div class="col-12">
-        <label class="form-label">Detailed Description</label>
-        <textarea id="details" name="details" rows="4" class="form-control"></textarea>
+        <!-- below divs use col of various sizes -->
+        <div class="col-md-3">
+          <label class="form-label" for="areaSize">Area Size</label>
+          <select id="areaSize" name="area_size" class="form-select" required>
+            <option value="">Select...</option>
+            <option>&lt;100ft</option>
+            <option>&gt;100ft</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="gridRef">
+            Grid Reference (8-digit, e.g. <span class="mono">5123 2068</span>)
+          </label>
+          <input id="gridRef" name="grid_reference" class="form-control" placeholder="5123 2068" required>
+          <small class="text-muted">Exactly 8 digits; displayed as <span class="mono">dddd dddd</span>.</small>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="photo">Photo (optional)</label>
+          <input id="photo" name="photo" type="file" accept="image/*" class="form-control">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="slope">Slope Category (degrees)</label>
+          <select id="slope" name="slope_category" class="form-select" required>
+            <option value="">Select...</option>
+            <option>0-4</option>
+            <option>5-7</option>
+            <option>8-10</option>
+            <option>11-13</option>
+            <option>&gt;14</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="elevation">Elevation (m)</label>
+          <input id="elevation" name="elevation" type="number" step="1" class="form-control">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="lighting">Light Conditions</label>
+          <select id="lighting" name="lighting" class="form-select">
+            <option value="">&mdash;</option>
+            <option>Natural light</option>
+            <option>Floodlights</option>
+            <option>No lighting</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="temperature">Temperature</label>
+          <input id="temperature" name="temperature" type="number" step="1" class="form-control">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="humidity">Humidity</label>
+          <input id="humidity" name="humidity" type="number" step="1" class="form-control">
+        </div>
+
+        <!-- Ground Surface - Tablet-style selectable buttons using bootstap btn-outline styles -->
+        <div class="col-12">
+          <label class="form-label d-block mb-2">Ground Surface</label>
+          <div class="d-flex flex-wrap gap-2">
+            <input type="checkbox" class="btn-check" id="gs_firm_grass" name="ground_surface" value="Firm Grass" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_firm_grass">Firm Grass</label>
+
+            <input type="checkbox" class="btn-check" id="gs_compact_soil" name="ground_surface" value="Compact Soil" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_compact_soil">Compact Soil</label>
+
+            <input type="checkbox" class="btn-check" id="gs_sand" name="ground_surface" value="Sand" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_sand">Sand</label>
+
+            <input type="checkbox" class="btn-check" id="gs_marsh" name="ground_surface" value="Marsh" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_marsh">Marsh</label>
+
+            <input type="checkbox" class="btn-check" id="gs_gravel" name="ground_surface" value="Gravel" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_gravel">Gravel</label>
+
+            <input type="checkbox" class="btn-check" id="gs_dust" name="ground_surface" value="Dust" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_dust">Dust</label>
+
+            <input type="checkbox" class="btn-check" id="gs_debris" name="ground_surface" value="Debris" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_debris">Debris</label>
+
+            <input type="checkbox" class="btn-check" id="gs_snow" name="ground_surface" value="Snow" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_snow">Snow</label>
+
+            <input type="checkbox" class="btn-check" id="gs_vegetation" name="ground_surface" value="Vegetation" autocomplete="off">
+            <label class="btn btn-outline-warning text-dark" for="gs_vegetation">Vegetation</label>
+          </div>
+        </div>
+
+        <!-- Hazards - Tablet-style selectable buttons using bootstap utility btn-outline classes -->
+        <div class="col-12 mt-3">
+          <label class="form-label d-block mb-2">Hazards</label>
+          <div class="d-flex flex-wrap gap-2">
+            <input type="checkbox" class="btn-check" id="hz_trees" name="hazards" value="Trees" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_trees">Trees</label>
+
+            <input type="checkbox" class="btn-check" id="hz_buildings" name="hazards" value="Buildings" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_buildings">Buildings</label>
+
+            <input type="checkbox" class="btn-check" id="hz_rocks" name="hazards" value="Rocks" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_rocks">Rocks</label>
+
+            <input type="checkbox" class="btn-check" id="hz_dense_veg" name="hazards" value="Dense Vegetation" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_dense_veg">Dense Vegetation</label>
+
+            <input type="checkbox" class="btn-check" id="hz_excessive_wildlife" name="hazards" value="Excessive Wildlife" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_excessive_wildlife">Excessive Wildlife</label>
+
+            <input type="checkbox" class="btn-check" id="hz_water" name="hazards" value="Water" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_water">Water</label>
+
+            <input type="checkbox" class="btn-check" id="hz_fences" name="hazards" value="Fences" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_fences">Fences</label>
+
+            <input type="checkbox" class="btn-check" id="hz_unstable_ground" name="hazards" value="Unstable Ground" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_unstable_ground">Unstable Ground</label>
+
+            <input type="checkbox" class="btn-check" id="hz_growth_18" name="hazards" value="Any Growth Above 18 Inches" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_growth_18">Any Growth Above 18 Inches</label>
+
+            <input type="checkbox" class="btn-check" id="hz_wildlife" name="hazards" value="Wildlife" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_wildlife">Wildlife</label>
+
+            <input type="checkbox" class="btn-check" id="hz_powerlines" name="hazards" value="Powerlines" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_powerlines">Powerlines</label>
+
+            <input type="checkbox" class="btn-check" id="hz_other" name="hazards" value="Other" autocomplete="off">
+            <label class="btn btn-outline-danger" for="hz_other">Other</label>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label" for="details">Detailed Description</label>
+          <textarea id="details" name="details" rows="4" class="form-control"></textarea>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="reporter">Reporter Name</label>
+          <input id="reporter" name="reporter_name" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="callsign">Service number / Callsign</label>
+          <input id="callsign" name="service_number" class="form-control">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="reportTime">Date &amp; Time of Observation</label>
+          <input id="reportTime" type="datetime-local" name="report_time" class="form-control" required>
+        </div>
+
+        <!-- Hidden lat/lng (filled by task click or marker drag) submit it when the form submits -->
+        <input type="hidden" id="lat" name="lat">
+        <input type="hidden" id="lng" name="lng">
+
+        <div class="text-end"> <!-- bootstrap utility class to right-aligned buttons -->
+          <button id="submitBtn" type="submit" class="btn btn-secondary" disabled>
+            <i class="bi bi-send me-1"></i> Send Report
+          </button>
+        </div>
+        <div id="toast" class="mt-2"></div>
       </div>
+    </form>
+  </section>
 
-      <div class="col-md-6">
-        <label class="form-label">Reporter Name</label>
-        <input id="reporter" name="reporter_name" class="form-control required" required>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Service number / Callsign</label>
-        <input id="callsign" name="service_number" class="form-control">
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Date &amp; Time of Observation</label>
-        <input id="reportTime" type="datetime-local" name="report_time" class="form-control required" required>
-      </div>
-
-      <!-- Hidden lat/lng (filled by task click or marker drag) submit it when the form submits -->
-      <input type="hidden" id="lat"  name="lat">
-      <input type="hidden" id="lng"  name="lng">
-
-      <div>
-        <button id="submitBtn" type="submit" class="btn btn-secondary ms-auto" disabled>
-          <i class="bi bi-send me-1"></i> Send Report
-        </button>
-      </div>
-      <div id="toast" class="mt-2"></div>
-    </div>
-  </form>
-
-    </section>
-
-  <!-- Summary card below the form to populate typed data-->
+  <!-- Summary card below the form to populate typed data -->
   <section class="card p-3 mt-3">
     <h6 class="mb-2">Report Summary</h6>
-    <div class="row small"> <!--two columns-->
+    <div class="row small"> <!-- two columns -->
       <div class="col-md-6">
         <div><strong>Site:</strong> <span id="sumSite" class="text-muted">—</span></div>
         <div><strong>Grid:</strong> <span id="sumGrid" class="text-muted mono">—</span></div>
