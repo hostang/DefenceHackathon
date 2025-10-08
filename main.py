@@ -16,7 +16,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def home():
     return render_template("index.html")  # uses templates/index.html
 
-# Optional: serve static files explicitly (Flask already serves /static/*)
+# serve static files explicitly
 @app.route("/static/<path:path>")
 def static_files(path):
     return send_from_directory("static", path)
