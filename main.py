@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify,send_from_directory, render_template
-#from google.cloud import firestore
+from google.cloud import firestore
 from google.cloud import bigquery
 
 from flask_cors import CORS
@@ -9,10 +9,53 @@ from flask_cors import CORS
 app = Flask(__name__)
 bq_client = bigquery.Client()
 
+db = firestore.Client()
+
 # to avoid Cross Origin Resource sharing issue
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Initialize Firestore DB client
+# --- Firestore CRUD Helper Functions ---
+def get_document(collection_name, document_id):
+    doc_ref = db.collection(collection_name).document(document_id)
+    doc = doc_ref.get()
+    if doc.exists:
+        return doc.to_dict()
+    else:
+        return None
+        
+def query_collection(collection_name):
+    docs = db.collection(collection_name).stream()
+    return [doc.to_dict() for doc in docs]
+
+# --- Flask Firestore Routes API endpoints ---
+@app.route("/firestore/document/<collection_name>/<document_id>", methods=["GET"])
+def get_firestore_document(collection_name, document_id):
+    """
+    Retrieves a single document from Firestore.
+    URL: GET /firestore/document/landingZones/id
+    """
+    doc_data = get_document(collection_name, document_id)
+    if doc_data:
+        return jsonify(doc_data), 200
+    else:
+        return jsonify({"error": "Document not found"}), 404
+        
+# add more routes for POST (create), PUT/PATCH (update), DELETE operations
+# a POST route to create a document:
+@app.route("/firestore/document/<collection_name>", methods=["POST"])
+def create_firestore_document(collection_name):
+    """
+    Creates a new document in firestore with an auto-generated ID.
+    PostCondition: Expects JSON body with the document data.
+    """
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request must be JSON"}), 400
+    try:
+        update_time, doc_ref = db.collection(collection_name).add(data)
+        return jsonify({"message": "Document created", "id": doc_ref.id}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/")
 def home():
