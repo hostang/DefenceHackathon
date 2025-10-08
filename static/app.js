@@ -145,7 +145,7 @@ form.addEventListener('submit', async (e)=>{
     submitBtn.disabled = true;
     const fd = new FormData(form);
     // use own API
-    const res = await fetch('https://defencehackathon-83857943147.europe-west2.run.app/submit', { method:'POST', body:fd });
+    const res = await fetch('/submit', { method:'POST', body:fd });
     if(!res.ok) throw new Error(await res.text());
     const data = await res.json();
     toast.innerHTML = `<div class="alert alert-success py-2 my-2">Report saved. ID: ${data.id}</div>`;
