@@ -23,8 +23,8 @@ def home():
 def static_files(path):
     return send_from_directory("static", path)
 
-#
-@app.route("/submit", methods=["GET"])
+# submit to bigquery from POST method of submit
+@app.route("/submit", methods=["POST"])
 def submit_form():
     # Get form data
     form_data = request.form.to_dict()
