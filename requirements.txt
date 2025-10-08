@@ -3,4 +3,5 @@ flask-cors
 gunicorn
 requests
 google-cloud-firestore
+google-cloud-bigquery
 
