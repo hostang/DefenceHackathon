@@ -31,9 +31,9 @@ def submit_form():
 
     # Convert latitude & longitude to floats
     row = {
-        "lz_id": form_data.get("lz_id"),
-        "latitude": float(form_data.get("latitude", 0)),
-        "longitude": float(form_data.get("longitude", 0)),
+        "lz_id": form_data.get("grid_reference"),
+        "latitude": float(form_data.get("lat", 0)),
+        "longitude": float(form_data.get("lng", 0)),
     }
     return jsonify({"success": True, "inserted": row}), 201
 
