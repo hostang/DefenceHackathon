@@ -44,8 +44,12 @@ function renderTasks(){
     if(i===0) setTimeout(()=>selectTask(tile),0);
   });
 }
+renderTasks();
+
+// not using maps any more - no longer required
 
 /* ===== Map ===== */
+/*
 let map, marker;
 window.initMap = function(){
   const start = {lat:TASKS[0].lat, lng:TASKS[0].lng};
@@ -54,6 +58,7 @@ window.initMap = function(){
 
   renderTasks();
 };
+*/
 
 /* ===== Task click -> fill form only site name and grid ref on selection ===== */
 function selectTask(tile){
@@ -62,9 +67,9 @@ function selectTask(tile){
   siteName.value = tile.dataset.name;
   gridRef.value  = tile.dataset.grid;
   const lat = parseFloat(tile.dataset.lat), lng = parseFloat(tile.dataset.lng);
-  setLatLng(lat, lng);
-  marker.setPosition({lat, lng});
-  map.panTo({lat, lng});
+  //setLatLng(lat, lng);
+  //marker.setPosition({lat, lng});
+  //map.panTo({lat, lng});
 }
 
 /* ===== Form refs getting the DOMS ===== */
@@ -86,6 +91,7 @@ function setLatLng(lat, lng){
   latH.value = lat;
   lngH.value = lng;
 }
+
 
     /*
 
