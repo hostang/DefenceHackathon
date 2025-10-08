@@ -11,7 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <!-- linking to static folder styles sheet -->
-<link rel="stylesheet" href="../static/img.png">
+<link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
 <!-- responsive container class with padding and vertical spacing with bootstrap -->
@@ -51,25 +51,34 @@
 
   <!-- google map card - section container for maps and photo of the location -->
   <section class="card p-3 mb-4" aria-labelledby="mediaSectionTitle">
-    <h2 id="mediaSectionTitle" class="visually-hidden">Location and Photo</h2>
-    <div class="row g-3">
-      <figure class="col-12 col-md-8 m-0">
-        <!-- map container; height is set in styles.css (#map) -->
-        <div id="map" role="img" aria-label="Satellite map showing current task location"></div>
-        <figcaption class="text-muted small mt-1">Interactive map. Use arrow keys with map controls if available.</figcaption>
-      </figure>
+    <!--<h2 id="mediaSectionTitle" class="visually-hidden">Location and Photo</h2>-->
+    <div class="row g-3 mt-1">
+    
+        <figure class="col-12 col-md-6 m-0">
+            <!-- Photo preview container -->
+            <div id="photoPreview"
+                 class="d-flex justify-content-center align-items-center bg-light border rounded overflow-hidden"
+                 role="img"
+                 aria-label="Selected photo preview"
+                 style="height:420px;">
+              <img src="../static/img1.png" alt="Location preview"
+                   style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+            <figcaption class="text-muted small mt-1 text-center">2D Satellite Image</figcaption>
+        </figure>
+    
       
-      <figure class="col-12 col-md-4 m-0">
+        <figure class="col-12 col-md-6 m-0">
         <!-- Photo preview container -->
         <div id="photoPreview"
              class="d-flex justify-content-center align-items-center bg-light border rounded overflow-hidden"
              role="img"
              aria-label="Selected photo preview"
              style="height:420px;">
-          <img src="../static/img.png" alt="Location preview"
+          <img src="../static/img2.png" alt="Location preview"
                style="max-width: 100%; max-height: 100%; object-fit: contain;">
         </div>
-        <figcaption class="text-muted small mt-1">Photo preview area.</figcaption>
+        <figcaption class="text-muted small mt-1 text-center">3D Street View Image</figcaption>
       </figure>
 
     </div>
@@ -78,8 +87,8 @@
   <!-- section encapsulating form -->
   <section class="p-3">
     <!-- Report Form card - container -->
-    <!-- the form is submitting file so using enctype -->
-    <form id="reportForm" class="card p-4" enctype="multipart/form-data">
+    <!-- the form is submitting file so -->
+    <form id="reportForm" class="card p-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Reconnaissance Report</h4>
         <!-- setting width of the progress bar -->
