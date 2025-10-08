@@ -144,7 +144,7 @@ form.addEventListener('submit', async (e)=>{
   try{
     submitBtn.disabled = true;
     const fd = new FormData(form);
-    // If posting to Cloud Run, set: const API_BASE="https://YOUR-RUN-URL"; and use `${API_BASE}/api/reports`
+    // use own API
     const res = await fetch('/api/reports', { method:'POST', body:fd });
     if(!res.ok) throw new Error(await res.text());
     const data = await res.json();
