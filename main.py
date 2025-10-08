@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,send_from_directory, render_template
 from google.cloud import firestore
 
 from flask_cors import CORS
@@ -11,6 +11,25 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize Firestore DB client
+
+@app.route("/")
+def home():
+    return render_template("index.html")  # uses templates/index.html
+
+# Optional: serve static files explicitly (Flask already serves /static/*)
+@app.route("/static/<path:path>")
+def static_files(path):
+    return send_from_directory("static", path)
+
+"""
+########
+@app.route('/')
+# simple test of the routes
+def hello_world():
+    return 'Hello from Cloud Run Flask App!'
+###########
+
+
 
 db = firestore.Client()
 
@@ -114,6 +133,7 @@ def get_landing_zones_by_location():
         })
 
     return jsonify(results), 200
+"""
 
 if __name__ == '__main__':
     # Gunicorn (or similar) will run the app in Cloud Run.
