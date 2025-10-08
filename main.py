@@ -35,6 +35,10 @@ def submit_form():
         "latitude": float(form_data.get("lat", 0)),
         "longitude": float(form_data.get("lng", 0)),
     }
+    # inserting rows to big query
+    errors = bg_client.insert_rows_json(mod-hack25swi-393.hlzlandingdata.data,[row])
+    if errors:
+        return jsonify({"error": errors}),400
     return jsonify({"success": True, "inserted": row}), 201
 
 
