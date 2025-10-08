@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, jsonify,send_from_directory, render_template
 from google.cloud import firestore
 from google.cloud import bigquery
+from datetime import datetime
+
 
 from flask_cors import CORS
 
@@ -26,7 +28,7 @@ def get_document(collection_name, document_id):
 def query_collection(collection_name):
     docs = db.collection(collection_name).stream()
     return [doc.to_dict() for doc in docs]
-
+latest_doc_id
 # --- Flask Firestore Routes API endpoints ---
 @app.route("/firestore/document/<collection_name>/<document_id>", methods=["GET"])
 def get_firestore_document(collection_name, document_id):
@@ -53,6 +55,7 @@ def create_firestore_document(collection_name):
         return jsonify({"error": "Request must be JSON"}), 400
     try:
         update_time, doc_ref = db.collection(collection_name).add(data)
+        latest_doc_id = doc_ref.id
         return jsonify({"message": "Document created", "id": doc_ref.id}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
