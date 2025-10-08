@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Reconnaissance Data Collection</title>
+
+<!-- Bootstrap + Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- App styles -->
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<main class="container py-4">
+
+  <!-- Header -->
+  <header class="border rounded-4 bg-white p-4 mb-3">
+    <div class="d-flex justify-content-between flex-wrap">
+      <div>
+        <h4 class="mb-0">Reconnaissance Data Collection</h4>
+        <small class="text-muted">Ground Intelligence Gathering System</small>
+      </div>
+      <div class="text-end small text-muted">
+        <i class="bi bi-clock me-1"></i><strong id="clockTime">—:—</strong>
+        <span class="badge text-bg-dark ms-1">Live</span>
+        <div id="clockDate"></div>
+      </div>
+    </div>
+
+    <!-- Current Tasks -->
+    <section class="mt-3">
+      <h6 class="mb-2"><i class="bi bi-clock-history me-1"></i>Current Tasks</h6>
+      <div id="taskList" class="d-flex flex-wrap gap-3"></div>
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-success"><i class="bi bi-archive me-1"></i> ACCESS LZ1 ARCHIVE</button>
+        <button class="btn btn-light border">Create new button</button>
+      </div>
+    </section>
+  </header>
+
+  <!-- Map -->
+  <section class="card p-3 mb-4">
+    <div id="map"></div>
+  </section>
+
+  <!-- Report Form -->
+  <form id="reportForm" class="card p-4" enctype="multipart/form-data">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="mb-0">Reconnaissance Report</h6>
+      <div class="w-25">
+        <div class="progress progress-thin"><div id="progressBar" class="progress-bar" style="width:0%"></div></div>
+        <small class="text-muted"><span id="progressPercent">0%</span> Complete</small>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="siteName">Name of site</label>
+        <input id="siteName" name="site_name" class="form-control required" required>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label" for="areaSize">Area Size</label>
+        <select id="areaSize" name="area_size" class="form-select required" required>
+          <option value="">Select...</option>
+          <option>&lt;100ft</option>
+          <option>&gt;100ft</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="gridRef">Grid Reference (8-digit, e.g. <span class="mono">5123 2068</span>)</label>
+        <input id="gridRef" name="grid_reference" class="form-control mono required" placeholder="5123 2068" required>
+        <small class="text-muted">Exactly 8 digits; displayed as <span class="mono">dddd dddd</span>.</small>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="photo">Photo (optional)</label>
+        <input id="photo" name="photo" type="file" accept="image/*" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="slope">Slope Category (degrees)</label>
+        <select id="slope" name="slope_category" class="form-select required" required>
+          <option value="">Select...</option>
+          <option>&lt;5</option>
+          <option>&lt;10</option>
+          <option>&lt;15</option>
+          <option>&lt;20</option>
+          <option>&gt;20</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="elevation">Elevation (m)</label>
+        <input id="elevation" name="elevation" type="number" step="1" class="form-control">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label" for="lighting">Light Conditions</label>
+        <select id="lighting" name="lighting" class="form-select">
+          <option value="">&mdash;</option>
+          <option>Natural light</option>
+          <option>Floodlights</option>
+          <option>No lighting</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label" for="details">Detailed Description</label>
+        <textarea id="details" name="details" rows="4" class="form-control"></textarea>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="reporter">Reporter Name</label>
+        <input id="reporter" name="reporter_name" class="form-control required" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="callsign">Service number / Callsign</label>
+        <input id="callsign" name="service_number" class="form-control">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label" for="reportTime">Date &amp; Time of Observation</label>
+        <input id="reportTime" type="datetime-local" name="report_time" class="form-control required" required>
+      </div>
+
+      <!-- Hidden lat/lng (filled by task click or marker drag) -->
+      <input type="hidden" id="lat"  name="lat">
+      <input type="hidden" id="lng"  name="lng">
+
+      <div class="col-12 d-flex">
+        <button id="submitBtn" type="submit" class="btn btn-secondary ms-auto" disabled>
+          <i class="bi bi-send me-1"></i> Send Report
+        </button>
+      </div>
+      <div id="toast" class="mt-2"></div>
+    </div>
+  </form>
+
+  <!-- Summary -->
+  <article class="card p-3 mt-3">
+    <h6 class="mb-2">Report Summary</h6>
+    <div class="row small">
+      <div class="col-md-6">
+        <div><strong>Site:</strong> <span id="sumSite" class="text-muted">—</span></div>
+        <div><strong>Grid:</strong> <span id="sumGrid" class="text-muted mono">—</span></div>
+        <div><strong>Lat/Lng:</strong> <span id="sumLatLng" class="text-muted mono">—</span></div>
+        <div><strong>Date/Time:</strong> <span id="sumTime" class="text-muted">—</span></div>
+        <div><strong>Area Size:</strong> <span id="sumArea" class="text-muted">—</span></div>
+      </div>
+      <div class="col-md-6">
+        <div><strong>Slope (°):</strong> <span id="sumSlope" class="text-muted">—</span></div>
+        <div><strong>Elevation (m):</strong> <span id="sumElev" class="text-muted">—</span></div>
+        <div><strong>Light:</strong> <span id="sumLight" class="text-muted">—</span></div>
+        <div><strong>Reporter:</strong> <span id="sumReporter" class="text-muted">—</span></div>
+      </div>
+      <div class="col-12 mt-2">
+        <div><strong>Hazards:</strong> <span id="sumHaz" class="text-muted">None</span></div>
+        <div class="mt-1"><strong>Details:</strong></div>
+        <div id="sumDetails" class="text-muted">—</div>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Bootstrap bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- App logic -->
+<script src="/static/app.js"></script>
+
+<!-- Google Maps (callback defined in app.js as window.initMap) -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBl8lw1_c5RsRLX_GqkoUJScn6E0IrOmV8&callback=initMap"></script>
+</body>
+</html>
