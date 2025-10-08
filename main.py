@@ -24,7 +24,7 @@ def static_files(path):
     return send_from_directory("static", path)
 
 #
-@app.route("/submit", methods=["POST"])
+@app.route("/submit", methods=["GET"])
 def submit_form():
     # Get form data
     form_data = request.form.to_dict()
