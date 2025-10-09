@@ -29,7 +29,7 @@ def query_collection(collection_name):
     docs = db.collection(collection_name).stream()
     return [doc.to_dict() for doc in docs]
 # global variable
-latest_doc_id = None
+# latest_doc_id = None
 
 # --- Flask Firestore Routes API endpoints ---
 @app.route("/firestore/document/<collection_name>/<document_id>", methods=["GET"])
