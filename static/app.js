@@ -143,8 +143,9 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
   
     if (response.ok) {
       const result = await response.json();
-      console.log('Data submitted:', result);
-      alert('Form submitted successfully!');
+      console.log('submitted:', result);
+        alert('Form submitted successfully!');
+        window.location.href = '/report.html';
     } else {
       const err = await response.text();
       console.error('Error:', err);
