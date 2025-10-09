@@ -4,12 +4,9 @@ from google.cloud import firestore
 from google.cloud import bigquery
 from datetime import datetime
 
-
 from flask_cors import CORS
 
-
 app = Flask(__name__)
-bq_client = bigquery.Client()
 
 db = firestore.Client()
 
@@ -96,30 +93,6 @@ def home():
 @app.route("/report")
 def report_page():
     return render_template("report.html")  # uses templates/index.html
-
-# serve static files explicitly
-@app.route("/static/<path:path>")
-def static_files(path):
-    return send_from_directory("static", path)
-
-# submit to bigquery from POST method of submit
-@app.route("/submit", methods=["POST"])
-def submit_form():
-    # Get form data
-    form_data = request.form.to_dict()
-
-    # Convert latitude & longitude to floats
-    row = {
-        "lz_id": form_data.get("grid_reference"),
-        "latitude": float(form_data.get("lat", 0)),
-        "longitude": float(form_data.get("lng", 0)),
-    }
-    # inserting rows to big query
-    errors = bq_client.insert_rows_json("mod-hack25swi-393.hlzlandingdata.data",[row])
-    if errors:
-        return jsonify({"error": errors}),400
-    return jsonify({"success": True, "inserted": row}), 201
-
 
 if __name__ == '__main__':
     # Gunicorn (or similar) will run the app in Cloud Run.
