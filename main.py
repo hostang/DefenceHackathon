@@ -94,7 +94,7 @@ def home():
     return render_template("index.html")  # uses templates/index.html
 
 @app.route("/report")
-def home():
+def report_page():
     return render_template("report.html")  # uses templates/index.html
 
 # serve static files explicitly
