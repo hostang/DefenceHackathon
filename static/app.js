@@ -31,8 +31,9 @@ function renderTasks(){
     tile.dataset.name = t.name; tile.dataset.grid = t.grid; tile.dataset.lat = t.lat; tile.dataset.lng = t.lng;
     tile.innerHTML = `
       <div class="d-flex justify-content-between">
-        <strong>${t.name}</strong>
-        <span class="badge ${t.status==='Update'?'text-bg-primary':'text-bg-dark'}">${t.status}</span>
+        <span class = "me-2">
+        <strong>${t.name}</strong></span>
+        <span class="badge ${t.status==='Update'?'text-bg-danger':'text-bg-dark'}">${t.status} </span>
       </div>
       <div class="text-muted small mt-1">
         📍 <span class="mono">${t.grid}</span><br>
@@ -145,7 +146,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
       const result = await response.json();
       console.log('submitted:', result);
         alert('Form submitted successfully!');
-        window.location.href = '/report';
+        window.location.href = '/report.html';
     } else {
       const err = await response.text();
       console.error('Error:', err);
