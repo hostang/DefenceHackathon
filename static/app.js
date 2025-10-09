@@ -145,7 +145,7 @@ document.getElementById('reportForm').addEventListener('submit', async (e) => {
       const result = await response.json();
       console.log('submitted:', result);
         alert('Form submitted successfully!');
-        window.location.href = '/report.html';
+        window.location.href = '/report';
     } else {
       const err = await response.text();
       console.error('Error:', err);
