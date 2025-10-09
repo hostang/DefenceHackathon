@@ -17,7 +17,7 @@
 <!-- responsive container class with padding and vertical spacing with bootstrap -->
 <main class="container py-4">
 
-  <!-- Header, using rounded border with bg white, setting padding and margin bottom -->
+  <!-- header section - using rounded border with bg white, setting padding and margin bottom -->
   <header class="border rounded-4 bg-white p-3 mb-4">
     <div class="d-flex justify-content-between">
       <div>
@@ -88,7 +88,7 @@
   <section class="p-3">
     <!-- Report Form card - container -->
     <!-- the form is submitting file so -->
-    <form id="reportForm" class="card p-4">
+    <form id="reportForm" class="card p-4" novalidate>
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Reconnaissance Report</h4>
         <!-- setting width of the progress bar -->
@@ -212,7 +212,7 @@
         <div class="col-12 mt-3">
           <label class="form-label d-block mb-2">Hazards</label>
           <div class="d-flex flex-wrap gap-2" id="hazardSection">
-            <input type="checkbox" class="btn-check" id="hz_trees" name="hazards" value="Trees" autocomplete="off">
+            <input type="checkbox" class="btn-check" id="hz_trees" name="hazards" value="Trees" autocomplete="off" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <label class="btn btn-outline-danger" for="hz_trees">Trees</label>
 
             <input type="checkbox" class="btn-check" id="hz_buildings" name="hazards" value="Buildings" autocomplete="off">
@@ -275,7 +275,7 @@
         <input type="hidden" id="lng" name="lng">
 
         <div class="text-end"> <!-- bootstrap utility class to right-aligned buttons -->
-          <button id="submitBtn" type="submit" class="btn btn-secondary" disabled>
+          <button id="submitBtn" type="submit" class="btn btn-secondary" enabled>
             <i class="bi bi-send me-1"></i> Send Report
           </button>
         </div>
@@ -305,7 +305,35 @@
       </div>
     </div>
   </section>
+
+ <!---<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Launch static backdrop modal
+  </button> -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Draw hazard on the image</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img src="../images/img1.png" alt="draw hazard on the image"
+               style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 </main>
+
+<!-- Fabric.js library to draw on the image-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 
 <!-- Bootstrap js cdn bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
