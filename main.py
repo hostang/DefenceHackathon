@@ -93,6 +93,10 @@ def create_firestore_document(collection_name):
 def home():
     return render_template("index.html")  # uses templates/index.html
 
+@app.route("/report")
+def home():
+    return render_template("report.html")  # uses templates/index.html
+
 # serve static files explicitly
 @app.route("/static/<path:path>")
 def static_files(path):
