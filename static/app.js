@@ -67,7 +67,7 @@ function selectTask(tile){
   siteName.value = tile.dataset.name;
   gridRef.value  = tile.dataset.grid;
   const lat = parseFloat(tile.dataset.lat), lng = parseFloat(tile.dataset.lng);
-  //setLatLng(lat, lng);
+  setLatLng(lat, lng);
   //marker.setPosition({lat, lng});
   //map.panTo({lat, lng});
 }
@@ -97,16 +97,57 @@ const hazardCheckboxes = document.querySelectorAll('input[name="hazards"]');
 const hazardSection = document.getElementById('hazardSection');
 
 const hazardMessage = document.createElement('div');
-hazardMessage.className = 'mt-2 text-danger small'; // Bootstrap utility classes
+hazardMessage.className = 'mt-2 text-danger small';
 hazardMessage.textContent = "⚠️ You selected a hazard. Please ensure you mark it on the map!";
 hazardMessage.style.display = 'none'; 
 
 hazardSection.appendChild(hazardMessage);
+
 
 // Listen for changes on all checkboxes
 hazardCheckboxes.forEach(cb => {
   cb.addEventListener('change', () => {
     const anyChecked = [...hazardCheckboxes].some(box => box.checked);
     hazardMessage.style.display = anyChecked ? 'block' : 'none';
+
   });
 });
+
+// bbelow is the form submission code to convert to JSON and send to the API
+document.getElementById('reportForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Stop the normal form submit
+  
+    const form = e.target;
+    const formData = new FormData(form);
+  
+    const jsonData = {};
+    formData.forEach((value, key) => {
+      if (value === 'on') {
+        jsonData[key] = true;
+      } else if (!isNaN(value) && value.trim() !== '') {
+        jsonData[key] = Number(value);
+      } else {
+        jsonData[key] = value;
+      }
+    });
+  
+    jsonData.ground_surface = formData.getAll('ground_surface'); // []
+    jsonData.hazards = formData.getAll('hazards');        // []
+  
+    // Send JSON to API
+    const response = await fetch('https://defencehackathon-83857943147.europe-west2.run.app/firestore/document/landingZones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(jsonData)
+    });
+  
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Data submitted:', result);
+      alert('Form submitted successfully!');
+    } else {
+      const err = await response.text();
+      console.error('Error:', err);
+      alert('Error submitting form: ' + response.status);
+    }
+  });
