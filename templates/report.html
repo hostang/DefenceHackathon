@@ -21,6 +21,9 @@
       <tr><th scope="row">Slope (degrees)</th><td id="slope_category">—</td></tr>
       <tr><th scope="row">Elevation (meters)</th><td id="elevation">—</td></tr>
       <tr><th scope="row">Lighting</th><td id="lighting">—</td></tr>
+      <tr><th scope="row">Temperature (degrees)</th><td id="temperature">—</td></tr>
+      <tr><th scope="row">Humidity (pct) </th><td id="humidity">—</td></tr>
+      <tr><th scope="row">Ground Surface</th><td id="ground_surface">—</td></tr>
       <tr><th scope="row">Hazards</th><td id="hazards">—</td></tr>
       <tr><th scope="row">Details</th><td id="details">—</td></tr>
       <tr><th scope="row">Reporter</th><td id="reporter_name">—</td></tr>
@@ -46,6 +49,9 @@ fetch('https://defencehackathon-83857943147.europe-west2.run.app/firestore/docum
     document.getElementById('slope_category').textContent = data.slope_category || '—';
     document.getElementById('elevation').textContent = data.elevation || '—';
     document.getElementById('lighting').textContent = data.lighting || '—';
+    document.getElementById('temperature').textContent = data.lighting || '—';
+    document.getElementById('ground_surface').textContent = data.lighting || '—';
+    document.getElementById('humidity').textContent = data.lighting || '—';
     document.getElementById('hazards').textContent = data.hazards || '—';
     document.getElementById('details').textContent = data.details || '—';
     document.getElementById('reporter_name').textContent = data.reporter_name || '—';
